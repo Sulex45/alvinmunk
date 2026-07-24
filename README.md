@@ -106,11 +106,42 @@ pnpm test                       # 59 web + 18 shared tests (vitest)
 
 ---
 
-## Users & feedback
+## Green Belt (Level 4) — submission
 
-- **Analytics:** Vercel Analytics + Speed Insights (page views, visitors, Core Web Vitals) — zero-config, in the Vercel dashboard.
-- **On-chain usage:** live unique-wallet counts per network at [`/stats`](https://alvinmunk.vercel.app/stats) (testnet → 50 goal, mainnet → 20 goal), read straight from Soroban RPC.
-- **Feedback form:** https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105 (name/@handle, email, wallet, 1–5 rating, open feedback). Responses land in a Notion database; a summary + "feedback → improvement (with commit links)" table is maintained here as testers come in.
+**Live demo:** https://alvinmunk.vercel.app · **Live network stats:** https://alvinmunk.vercel.app/stats · **Demo video:** https://youtu.be/3FANRKLM6PI
+
+A production MVP on Stellar with real users, one-tap onboarding, analytics + monitoring, and a live on-chain usage dashboard.
+
+### Screenshots
+
+| Product UI | Mobile responsive | Analytics / monitoring |
+| :---: | :---: | :---: |
+| ![product ui](./green-product.png) | ![mobile responsive](./green-mobile.png) | ![on-chain usage stats](./green-analytics.png) |
+
+### Proof of 10+ user wallet interactions
+
+- **34 unique wallets** have interacted with the contracts (live count at [`/stats`](https://alvinmunk.vercel.app/stats), read straight from Soroban RPC — screenshot above). Each onboarded user signs on-chain: a genesis `manageData` tx + a `registry.claim` contract call; passkey users onboard as `C…` smart wallets, classic users as `G…`.
+- **Verify on-chain:** every wallet + tx is on Stellar Expert. The registry contract shows all handle claims: [`CCT5EGFZ…`](https://stellar.expert/explorer/testnet/contract/CCT5EGFZ33IFLMUU6EBMC6NWRLX5TWJS5FICNJFBG7MU5PTAU6PFMVH4); the reputation contract shows vouch activity: [`CDRYXUS5…`](https://stellar.expert/explorer/testnet/contract/CDRYXUS55TKGYEM3YUB3YTJWQKSWWQABK6YPQK7SLEPVALWYK4IR7WCL).
+
+### Basic user feedback summary
+
+Collected via a public [Notion feedback form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) (name/@handle, email, wallet, 1–5 rating, open feedback).
+
+- **Average rating so far:** 4 / 5.
+- **What worked:** "Interface is working well."
+- **Top feature request:** weighted vouch — weight each vouch by the voucher's own reputation, split across everyone they vouch for, anchored to a verified seed set.
+- **Feedback → improvement (with commit links):** maintained in [`docs/USER_FEEDBACK.md`](./docs/USER_FEEDBACK.md) as more testers come in.
+
+### Requirements → where they live
+
+| Requirement | Implementation |
+| --- | --- |
+| Production-ready MVP, mobile responsive, loading/error states | Next.js 14 on Vercel; `humanizeError` + skeletons + pending/success/fail toasts across every flow |
+| Real-world onboarding | One-tap handle → passkey/dev wallet, fee-sponsored, no seed phrase (`components/landing-onboard.tsx`, `app/app`) |
+| Monitoring + analytics | Vercel Analytics + Speed Insights (`components/analytics.tsx`) + live on-chain usage at `/stats` (`app/api/stats`) |
+| 10+ users + wallet interactions | 34 wallets on-chain (`/stats`), verifiable on Stellar Expert |
+| Feedback collection | Public Notion form + summary above |
+| Contracts on testnet · 15+ commits · public repo · demo video | ✅ (see Yellow/Orange sections; 40+ commits) |
 
 ---
 

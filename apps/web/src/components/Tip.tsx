@@ -12,14 +12,18 @@ import {
   tip,
   usdcToStroops,
 } from '@/lib/rewards';
+import { resolveHandle } from '@/lib/registry';
+import { normalizeHandle } from '@/lib/profile';
 import { Frame } from '@/components/fx/frame';
 import { NumberTicker } from '@/components/fx/number-ticker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StateArt } from '@/components/ui/state-art';
-import { withTimeout, humanizeError } from '@/lib/utils';
+import { withTimeout, humanizeError, shortAddress } from '@/lib/utils';
 import { toast } from '@/components/ui/toaster';
+
+const RAW_ADDR = /^[GC][A-Z2-7]{55}$/;
 
 // Rewards contract error codes that can surface on tip (mirrors contracts/rewards Error enum).
 // An insufficient-USDC failure (the SAC's own error) is caught by humanizeError directly.
@@ -37,6 +41,10 @@ export function Tip({ address }: { address: string }) {
   const [balance, setBalance] = useState<bigint | null>(null);
   const [trusts, setTrusts] = useState<boolean | null>(null);
   const [to, setTo] = useState('');
+  // Feedback-driven: people think in @handles, not 56-char keys. Resolve a typed handle to
+  // its on-chain address via the registry so the tip can target "@beko" instead of a G…/C….
+  const [resolved, setResolved] = useState<string | null>(null);
+  const [resolving, setResolving] = useState(false);
   const [amount, setAmount] = useState('1');
   const [busy, setBusy] = useState<null | 'enable' | 'faucet' | 'tip'>(null);
   const [hash, setHash] = useState<string | null>(null);
@@ -54,6 +62,40 @@ export function Tip({ address }: { address: string }) {
   }, [address]);
 
   useEffect(refresh, [refresh]);
+
+  // Resolve the recipient: a raw G…/C… key is used as-is; anything else is treated as a
+  // handle and looked up on-chain (debounced). `resolved` is the address the tip actually
+  // targets, so a mistyped handle can never silently send to a wrong-but-valid key.
+  useEffect(() => {
+    const raw = to.trim();
+    if (RAW_ADDR.test(raw)) {
+      setResolved(raw);
+      setResolving(false);
+      return;
+    }
+    const handle = normalizeHandle(raw.replace(/^@/, ''));
+    if (handle.length < 3) {
+      setResolved(null);
+      setResolving(false);
+      return;
+    }
+    let alive = true;
+    setResolving(true);
+    const t = setTimeout(() => {
+      resolveHandle(handle)
+        .catch(() => null)
+        .then((addr) => {
+          if (alive) {
+            setResolved(addr);
+            setResolving(false);
+          }
+        });
+    }, 400);
+    return () => {
+      alive = false;
+      clearTimeout(t);
+    };
+  }, [to]);
 
   async function run(kind: 'enable' | 'faucet' | 'tip', fn: () => Promise<string | void>) {
     setBusy(kind);
@@ -118,9 +160,23 @@ export function Tip({ address }: { address: string }) {
             <Input
               value={to}
               onChange={(e) => setTo(e.target.value.trim())}
-              placeholder="Recipient address (G… or C…)"
+              placeholder="@handle or address (G… / C…)"
               className="font-mono text-xs"
             />
+            {/* Resolution feedback: confirm who a handle points to before sending. */}
+            {!RAW_ADDR.test(to.trim()) && to.trim().length > 0 && (
+              <p className="-mt-1 text-xs text-muted-foreground">
+                {resolving ? (
+                  'Looking up handle…'
+                ) : resolved ? (
+                  <span className="text-secondary">
+                    → {shortAddress(resolved, 6, 6)}
+                  </span>
+                ) : (
+                  <span className="text-destructive">No wallet found for that handle</span>
+                )}
+              </p>
+            )}
             <div className="flex gap-2">
               <Input
                 value={amount}
@@ -133,10 +189,11 @@ export function Tip({ address }: { address: string }) {
                 onClick={() =>
                   run('tip', async () => {
                     const wallet = await getWallet();
-                    await tip(wallet, to, usdcToStroops(amount));
+                    // `resolved` is guaranteed a valid key here (button is gated on it).
+                    await tip(wallet, resolved!, usdcToStroops(amount));
                   })
                 }
-                disabled={busy !== null || !/^[GC][A-Z2-7]{55}$/.test(to)}
+                disabled={busy !== null || resolving || !resolved}
                 className="flex-1"
               >
                 {busy === 'tip' ? 'Sending…' : 'Send tip'}

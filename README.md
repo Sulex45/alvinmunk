@@ -145,6 +145,41 @@ Collected via a public [Notion feedback form](https://star-eclipse-1fd.notion.si
 
 ---
 
+## Blue Belt (Level 5) — submission
+
+Growth + a feedback loop that changed the product: a pitch deck, a live testnet-user count climbing toward 50, real on-chain transaction activity, exported feedback, and a shipped improvement traceable to a specific request.
+
+### Pitch deck
+
+- **Slides:** [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) (problem → proof-of-people → two-track anti-sybil → traction → ask).
+- A designed Canva version is generated from the same outline; export link added here once the layout is finalized.
+
+### Testnet users + real transaction activity
+
+- **Live count at [`/stats`](https://alvinmunk.vercel.app/stats)** (Testnet tab), read straight from Soroban RPC `getEvents` — grows as people onboard, verifiable per-wallet on Stellar Expert.
+- **Real activity, not just signups:** onboarding writes a genesis `manageData` tx + a `registry.claim` contract call; beyond that, wallets run `mint_vouch` / `claim_vouch` (Social XP) and attester-verified quests (Earned XP). The reputation contract [`CDRYXUS5…`](https://stellar.expert/explorer/testnet/contract/CDRYXUS55TKGYEM3YUB3YTJWQKSWWQABK6YPQK7SLEPVALWYK4IR7WCL) shows the vouch/claim traffic.
+
+### Feedback → shipped improvement (with commit links)
+
+Feedback is collected via the public [Notion form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) and exported to [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (Notion → CSV; also openable as `.xlsx`).
+
+| Feedback | Change shipped | Where |
+| --- | --- | --- |
+| Recipients are hard — nobody memorizes a 56-char key | **Tip by `@handle`**: type `@beko`, the registry resolves it to the wallet on-chain (debounced), with inline confirmation of the resolved address before sending | [`components/Tip.tsx`](./apps/web/src/components/Tip.tsx) |
+| "weighted vouch" (top request) | Scoped for the reputation track — weight each vouch by the voucher's own reputation, split across their vouchees, anchored to a verified seed set | tracked in [`docs/USER_FEEDBACK.md`](./docs/USER_FEEDBACK.md) |
+
+### Requirements → where they live
+
+| Requirement | Implementation |
+| --- | --- |
+| Pitch deck | [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) + Canva export |
+| ~50 testnet users | Live count at [`/stats`](https://alvinmunk.vercel.app/stats), verifiable on Stellar Expert |
+| Real transaction activity | Vouch/claim/quest txs on-chain (reputation contract above) |
+| Feedback collection + export | Notion form → [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) |
+| Feedback-driven iteration | Tip-by-`@handle` (`components/Tip.tsx`) — see table above |
+
+---
+
 ## Architecture (and the "no standing backend" decision)
 
 ```
@@ -234,7 +269,7 @@ Copy the printed `NEXT_PUBLIC_*` ids into `apps/web/.env.local` (template: [`.en
 | **Sprint 2 / Yellow belt**: `reputation` deployed to testnet; vouch mint/claim wired; leaderboard from `social` events (RPC-direct, 5s poll); event schema frozen | ✅ implemented + verified on-chain (social 10/10, earned 0/0) |
 | Serverless attester `/api/attest` | 🟡 transport + structure done; **evidence verification stubbed** (Orange belt) |
 | Passkey provider (`connectPasskey`) | 🟡 dev-wallet fallback works now; **wire passkey-kit** for FaceID (White belt infra) |
-| Handle → address resolution | 🟡 vouch is address-based for now (Orange) |
+| Handle → address resolution | ✅ live in Tip (type `@handle`, registry resolves on-chain); vouch still address-based |
 | Indexer | ⏸ deferred (RPC-direct for MVP) |
 
 Each TODO references the belt doc that owns it. Build order follows the belts/sprints: see [`docs/SPRINTS.md`](./docs/SPRINTS.md). **Sprints 0–2 done; Orange + Green code complete** — all 3 contracts deployed + cross-contract verified on-chain, claim-secret vouch loop, real serverless attester (GitHub PR / referral tx), anti-sybil (claim-secret + per-day cap + asymmetric + first-pair + ring-flag), USDC tip rail + faucet, on-chain rank→reward table with treasury circuit breaker (daily cap + frozen set + proof-of-funding toggle), weekly streak, leaderboard snapshot cache. **134 tests green** (57 contract incl. property/fuzz + 59 web + 18 shared). Remaining for Orange/Green: public testers + 2-week live retention.

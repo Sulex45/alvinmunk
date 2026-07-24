@@ -48,9 +48,8 @@ Add this block to `README.md` (update the numbers, the sheet link, and the commi
 ### How we are improving next (feedback → commit)
 | Feedback | Change | Commit |
 | --- | --- | --- |
-| "Couldn't tell who vouched me" | Surfaced inbound vouchers on the profile hero | <commit link> |
-| "Cash-out was unclear" | Added the SEP-24 off-ramp flow (issue #1) | <commit link> |
-| "Wanted xBull/LOBSTR on onboarding" | Wired Stellar Wallets Kit into onboarding (issue #4/#10) | <commit link> |
+| "Recipient keys are impossible to type" | **Tip by `@handle`** — registry resolves the handle to a wallet on-chain, with inline confirmation before sending (`components/Tip.tsx`) | [`a1cdab0`](https://github.com/mericcintosun/alvinmunk/commit/a1cdab0) |
+| "weighted vouch" (top request) | Scoped weighted-vouch for the reputation track (weight by voucher reputation, split across vouchees, seed-set anchored) | <planned> |
 ```
 
 > The rubric specifically wants a **git commit link** next to each improvement. Ship the change, then paste the commit URL (`github.com/mericcintosun/alvinmunk/commit/<sha>`) into the table.

@@ -151,8 +151,8 @@ Growth + a feedback loop that changed the product: a pitch deck, a live testnet-
 
 ### Pitch deck
 
-- **Slides:** [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) (problem → proof-of-people → two-track anti-sybil → traction → ask).
-- A designed Canva version is generated from the same outline; export link added here once the layout is finalized.
+- **Designed deck (PDF):** [`docs/pitch-deck.pdf`](./docs/pitch-deck.pdf) — 12 slides, brand-skinned (our violet/mint/gold palette, logo, and passport centerpiece), also viewable [on Canva](https://www.canva.com/d/JFRJdqiOBEvbz_4).
+- **Outline / speaker notes:** [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) (problem → proof-of-people → two-track anti-sybil → traction → ask).
 
 ### Testnet users + real transaction activity
 
@@ -172,7 +172,7 @@ Feedback is collected via the public [Notion form](https://star-eclipse-1fd.noti
 
 | Requirement | Implementation |
 | --- | --- |
-| Pitch deck | [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) + Canva export |
+| Pitch deck | [`docs/pitch-deck.pdf`](./docs/pitch-deck.pdf) (brand-skinned) + [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) outline |
 | ~50 testnet users | Live count at [`/stats`](https://alvinmunk.vercel.app/stats), verifiable on Stellar Expert |
 | Real transaction activity | Vouch/claim/quest txs on-chain (reputation contract above) |
 | Feedback collection + export | Notion form → [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) |

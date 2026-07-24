@@ -120,7 +120,7 @@ A production MVP on Stellar with real users, one-tap onboarding, analytics + mon
 
 ### Proof of 10+ user wallet interactions
 
-- **50 unique wallets** have interacted with the contracts (live count at [`/stats`](https://alvinmunk.vercel.app/stats), read straight from Soroban RPC — screenshot above). Each onboarded user signs on-chain: a genesis `manageData` tx + a `registry.claim` contract call; passkey users onboard as `C…` smart wallets, classic users as `G…`.
+- **50+ unique wallets** have interacted with the contracts (live count at [`/stats`](https://alvinmunk.vercel.app/stats), read straight from Soroban RPC — screenshot above). Each onboarded user signs on-chain: a genesis `manageData` tx + a `registry.claim` contract call; passkey users onboard as `C…` smart wallets, classic users as `G…`.
 - **Verify on-chain:** every wallet + tx is on Stellar Expert. The registry contract shows all handle claims: [`CCT5EGFZ…`](https://stellar.expert/explorer/testnet/contract/CCT5EGFZ33IFLMUU6EBMC6NWRLX5TWJS5FICNJFBG7MU5PTAU6PFMVH4); the reputation contract shows vouch activity: [`CDRYXUS5…`](https://stellar.expert/explorer/testnet/contract/CDRYXUS55TKGYEM3YUB3YTJWQKSWWQABK6YPQK7SLEPVALWYK4IR7WCL).
 
 ### Basic user feedback summary
@@ -139,7 +139,7 @@ Collected via a public [Notion feedback form](https://star-eclipse-1fd.notion.si
 | Production-ready MVP, mobile responsive, loading/error states | Next.js 14 on Vercel; `humanizeError` + skeletons + pending/success/fail toasts across every flow |
 | Real-world onboarding | One-tap handle → passkey/dev wallet, fee-sponsored, no seed phrase (`components/landing-onboard.tsx`, `app/app`) |
 | Monitoring + analytics | Vercel Analytics + Speed Insights (`components/analytics.tsx`) + live on-chain usage at `/stats` (`app/api/stats`) |
-| 10+ users + wallet interactions | 50 wallets on-chain (`/stats`), verifiable on Stellar Expert |
+| 10+ users + wallet interactions | 50+ wallets on-chain (`/stats`), verifiable on Stellar Expert |
 | Feedback collection | Public Notion form + summary above |
 | Contracts on testnet · 15+ commits · public repo · demo video | ✅ (see Yellow/Orange sections; 40+ commits) |
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -26,7 +26,7 @@ export function AnalyticsProvider() {
     if (!PH_KEY || inited || typeof window === 'undefined') return;
     posthog.init(PH_KEY, {
       api_host: PH_HOST,
-      capture_pageview: false, // we send pageviews on route change below
+      capture_pageview: true, // let PostHog capture the initial pageview reliably
       capture_pageleave: true,
       autocapture: true,
       person_profiles: 'identified_only',
@@ -34,8 +34,14 @@ export function AnalyticsProvider() {
     inited = true;
   }, []);
 
-  // Manual pageview on every App Router navigation.
+  // Manual pageview on App Router navigation (the initial one is already sent by
+  // capture_pageview:true above, so skip the first run to avoid double-counting).
+  const firstRun = useRef(true);
   useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
     if (PH_KEY && inited && typeof window !== 'undefined') {
       posthog.capture('$pageview', { $current_url: window.location.href });
     }

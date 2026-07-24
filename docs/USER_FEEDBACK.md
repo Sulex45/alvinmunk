@@ -1,0 +1,74 @@
+# alvinmunk — User onboarding & feedback (Green / Blue / Black)
+
+The belt program requires a Google Form that collects user details + a product rating, an exported sheet linked from the README, and a feedback-driven improvement plan with commit links. This file is the spec + the ready-to-paste README section.
+
+---
+
+## 1. Google Form spec
+
+Create a Google Form titled **"alvinmunk — early access & feedback"**. Add exactly these fields (the belt rubric names wallet address, email, name, and a rating).
+
+| # | Question | Type | Required | Notes |
+|---|---|---|---|---|
+| 1 | Your name or @handle | Short answer | Yes | matches their alvinmunk handle |
+| 2 | Email | Short answer (email validation) | Yes | for follow-up |
+| 3 | Your Stellar wallet address (G… or C…) | Short answer | Yes | ties the response to on-chain activity |
+| 4 | How did you use alvinmunk? | Checkboxes | Yes | created a profile / vouched for someone / claimed a vouch / completed a quest / sent or received USDC |
+| 5 | Rate the product (1–5) | Linear scale 1–5 | Yes | the required rating |
+| 6 | What worked well? | Paragraph | No | qualitative |
+| 7 | What was confusing or missing? | Paragraph | No | the gold for iteration |
+| 8 | One feature you want next | Short answer | No | feeds the roadmap |
+| 9 | Can we contact you for a quick chat? | Yes/No | No | recruit power users |
+
+Settings: collect email off (field 2 captures it), one response per person off (allow edits), show a link to `alvinmunk.vercel.app` on the confirmation screen.
+
+**Export:** Responses tab → link to Google Sheets → File → Download → Microsoft Excel (.xlsx). Commit the file to the repo as `docs/feedback/responses.xlsx` (or link the shared Sheet, view-only) and reference it from the README.
+
+**Getting the 10 / 50 / 20-mainnet users:** onboard whole cohorts where people already know each other (a student club, a builder Discord, an ambassador group). Because a vouch names a specific person, seed 3–4 real users and have each vouch 3 people; the share links pull the rest in. Keep the form link in the app footer and in the post-vouch success toast.
+
+---
+
+## 2. README section — paste this in
+
+Add this block to `README.md` (update the numbers, the sheet link, and the commit links as you iterate).
+
+```markdown
+## Users & feedback
+
+- **Onboarding form:** <Google Form link>
+- **Responses (exported):** [docs/feedback/responses.xlsx](./docs/feedback/responses.xlsx)
+- **Users onboarded:** N (wallet interactions verifiable on Stellar Expert — see the wallet column in the sheet)
+- **Average rating:** X.X / 5 (N responses)
+
+### What users told us
+- Theme 1 (e.g. "the vouch link is delightful, but people wanted to see who vouched them faster") — M mentions
+- Theme 2 (e.g. "USDC cash-out was unclear") — M mentions
+- Theme 3 …
+
+### How we are improving next (feedback → commit)
+| Feedback | Change | Commit |
+| --- | --- | --- |
+| "Couldn't tell who vouched me" | Surfaced inbound vouchers on the profile hero | <commit link> |
+| "Cash-out was unclear" | Added the SEP-24 off-ramp flow (issue #1) | <commit link> |
+| "Wanted xBull/LOBSTR on onboarding" | Wired Stellar Wallets Kit into onboarding (issue #4/#10) | <commit link> |
+```
+
+> The rubric specifically wants a **git commit link** next to each improvement. Ship the change, then paste the commit URL (`github.com/mericcintosun/alvinmunk/commit/<sha>`) into the table.
+
+---
+
+## 3. Proof of wallet interactions (Green/Blue/Black)
+
+For each onboarded user you need on-chain proof:
+- The wallet address column in the sheet is the anchor.
+- For a quick proof list, pull recent `vouch:claimed` / `profile` / `tipped` events and link the tx or the account on Stellar Expert. `scripts/status.mjs` and the leaderboard already read these events.
+- Keep a short `docs/feedback/onboarded_users.md` table: handle, address, first on-chain action, Stellar Expert link.
+
+---
+
+## 4. Analytics cross-check
+
+PostHog (already wired) gives you the quantitative side to pair with the form:
+- `profile_created`, `vouch_minted` events + autocaptured pageviews.
+- Funnels (landing → profile_created → vouch_minted) and 7-day retention among users who received a spend.
+- Export a screenshot of the funnel/retention board for the "analytics or monitoring setup" submission screenshot.

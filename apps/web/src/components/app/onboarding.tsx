@@ -7,6 +7,7 @@ import { recordGenesis } from '@/lib/genesis';
 import { claimHandle, isHandleAvailable } from '@/lib/registry';
 import { normalizeHandle, type Profile } from '@/lib/profile';
 import { humanizeError } from '@/lib/utils';
+import { track, identify, trackError } from '@/lib/track';
 import { Crest } from '@/components/brand/crest';
 import { AvatarPicker } from '@/components/AvatarPicker';
 import { type FaceId } from '@/lib/avatar';
@@ -73,10 +74,13 @@ export function Onboarding() {
         avatar: face ? { kind: 'face', id: face } : undefined,
       };
       setProfile(p);
+      identify(w.address, { handle: h, walletKind: w.kind });
+      track('profile_created', { walletKind: w.kind });
       toast.success(`Your profile is live — @${h} stamped on-chain.`);
     } catch (e) {
       // Surface the FULL error (diagnostic events name the failing contract/value).
       console.error('🛑 createProfile failed →', e);
+      trackError(e, { flow: 'create_profile' });
       toast.error(humanizeError(e));
     } finally {
       setCreating(false);

@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { StateArt } from '@/components/ui/state-art';
 import { Sticker } from '@/components/ui/sticker';
 import { humanizeError } from '@/lib/utils';
+import { track, trackError } from '@/lib/track';
 import { toast } from '@/components/ui/toaster';
 
 // Reputation contract error codes that can surface on mint_vouch (mirrors the Error enum).
@@ -48,9 +49,11 @@ export function VouchCompose() {
       // The claim-secret rides in the URL fragment (#s=…), which browsers NEVER send to
       // the server — so it can't leak into access logs, the Referer header, or analytics.
       setLink(`${buildClaimUrl(origin, id)}#s=${secret}`);
+      track('vouch_minted', { hasNote: note.trim().length > 0, walletKind: wallet.kind });
       toast.success('Their star is lit — share the link to send it ✨');
     } catch (e) {
       const msg = humanizeError(e, VOUCH_ERRORS);
+      trackError(e, { flow: 'vouch_mint' });
       setError(msg);
       toast.error(msg);
     } finally {

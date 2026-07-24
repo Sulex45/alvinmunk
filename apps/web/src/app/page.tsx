@@ -13,6 +13,7 @@ import { Sticker } from '@/components/ui/sticker';
 import { buttonVariants } from '@/components/ui/button';
 import { asset, type StickerName } from '@/lib/assets';
 import { cn } from '@/lib/utils';
+import { LandingOnboard } from '@/components/landing-onboard';
 
 // Small sticker icons cycle through the live vouch ticker — heart=vouch, coin=tip, eye=seen.
 const TICKER_ICONS: StickerName[] = ['ticker-heart', 'ticker-coin', 'ticker-eye'];
@@ -86,15 +87,14 @@ export default function LandingPage() {
               </p>
             </Reveal>
             <Reveal delay={0.18}>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <span className="relative inline-flex overflow-hidden rounded-full">
-                  <Link href="/app" className={cn(buttonVariants({ variant: 'flow', size: 'lg' }))}>
-                    Open the app <ArrowRight className="size-4" />
-                  </Link>
-                  <BorderBeam size={60} duration={6} colorTo="hsl(var(--tertiary))" />
-                </span>
-                <Link href="/how-it-works" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'glass')}>
-                  See how it works
+              <div className="mt-9 flex flex-col gap-3">
+                {/* One-field onboarding, right here. Type a handle, tap once, you're in. */}
+                <LandingOnboard />
+                <Link
+                  href="/how-it-works"
+                  className="inline-flex w-fit items-center gap-1 pl-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  or see how it works <ArrowRight className="size-3.5" />
                 </Link>
               </div>
             </Reveal>

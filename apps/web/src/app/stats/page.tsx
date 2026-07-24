@@ -24,7 +24,10 @@ const TABS: { key: NetKey; label: string; goal: string }[] = [
 
 function explorer(net: NetKey, addr: string) {
   const seg = net === 'mainnet' ? 'public' : 'testnet';
-  return `https://stellar.expert/explorer/${seg}/account/${addr}`;
+  // C… are contract / passkey smart-wallet addresses (Stellar Expert path is /contract),
+  // G… are classic accounts (/account). Using the wrong one shows "invalid account".
+  const kind = addr.startsWith('C') ? 'contract' : 'account';
+  return `https://stellar.expert/explorer/${seg}/${kind}/${addr}`;
 }
 
 export default function StatsPage() {

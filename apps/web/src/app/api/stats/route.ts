@@ -17,16 +17,37 @@ const ADDR = /^[GC][A-Z2-7]{55}$/;
 
 type NetKey = 'testnet' | 'mainnet';
 
-const NETWORKS: Record<NetKey, { rpc: string; rep?: string; registry?: string }> = {
+const NETWORKS: Record<
+  NetKey,
+  { rpc: string; rep?: string; registry?: string; exclude?: (string | undefined)[] }
+> = {
   testnet: {
     rpc: process.env.NEXT_PUBLIC_RPC_URL || 'https://soroban-testnet.stellar.org',
     rep: process.env.NEXT_PUBLIC_REPUTATION_CONTRACT_ID,
     registry: process.env.NEXT_PUBLIC_REGISTRY_CONTRACT_ID,
+    // The app's own contracts appear in event topics (e.g. the quest_registry as att_set
+    // issuer); they are NOT users, so exclude them from the count.
+    exclude: [
+      process.env.NEXT_PUBLIC_REPUTATION_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_REGISTRY_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_REWARDS_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_QUEST_REGISTRY_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_GATE_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_USDC_SAC_ID,
+    ],
   },
   mainnet: {
     rpc: process.env.MAINNET_RPC_URL || 'https://mainnet.sorobanrpc.com',
     rep: process.env.MAINNET_REPUTATION_CONTRACT_ID,
     registry: process.env.MAINNET_REGISTRY_CONTRACT_ID,
+    exclude: [
+      process.env.MAINNET_REPUTATION_CONTRACT_ID,
+      process.env.MAINNET_REGISTRY_CONTRACT_ID,
+      process.env.MAINNET_REWARDS_CONTRACT_ID,
+      process.env.MAINNET_QUEST_REGISTRY_CONTRACT_ID,
+      process.env.MAINNET_GATE_CONTRACT_ID,
+      process.env.MAINNET_USDC_SAC_ID,
+    ],
   },
 };
 
@@ -84,6 +105,8 @@ async function statsFor(net: NetKey) {
   } catch {
     /* return what we have */
   }
+  // Drop the app's own contract addresses so only real user wallets are counted.
+  for (const id of cfg.exclude ?? []) if (id) seen.delete(id);
   const addresses = [...seen];
   return {
     network: net,

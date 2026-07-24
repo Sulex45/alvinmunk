@@ -106,6 +106,14 @@ pnpm test                       # 59 web + 18 shared tests (vitest)
 
 ---
 
+## Users & feedback
+
+- **Analytics:** Vercel Analytics + Speed Insights (page views, visitors, Core Web Vitals) — zero-config, in the Vercel dashboard.
+- **On-chain usage:** live unique-wallet counts per network at [`/stats`](https://alvinmunk.vercel.app/stats) (testnet → 50 goal, mainnet → 20 goal), read straight from Soroban RPC.
+- **Feedback form:** https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105 (name/@handle, email, wallet, 1–5 rating, open feedback). Responses land in a Notion database; a summary + "feedback → improvement (with commit links)" table is maintained here as testers come in.
+
+---
+
 ## Architecture (and the "no standing backend" decision)
 
 ```

@@ -48,7 +48,7 @@ Add this block to `README.md` (update the numbers, the sheet link, and the commi
 ### How we are improving next (feedback → commit)
 | Feedback | Change | Commit |
 | --- | --- | --- |
-| "Recipient keys are impossible to type" | **Tip by `@handle`** — registry resolves the handle to a wallet on-chain, with inline confirmation before sending (`components/Tip.tsx`) | [`a1cdab0`](https://github.com/mericcintosun/alvinmunk/commit/a1cdab0) |
+| "Recipient keys are impossible to type" | **Tip by `@handle`** — registry resolves the handle to a wallet on-chain, with inline confirmation before sending (`components/Tip.tsx`) | [`2bac3c1`](https://github.com/mericcintosun/alvinmunk/commit/2bac3c1) |
 | "weighted vouch" (top request) | Scoped weighted-vouch for the reputation track (weight by voucher reputation, split across vouchees, seed-set anchored) | <planned> |
 ```
 

@@ -125,7 +125,7 @@ A production MVP on Stellar with real users, one-tap onboarding, analytics + mon
 
 ### Basic user feedback summary
 
-Collected via a public [Notion feedback form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) (name/@handle, email, wallet, 1–5 rating, open feedback).
+Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback) — also mirrored as a [Notion form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105).
 
 - **Average rating so far:** 4 / 5.
 - **What worked:** "Interface is working well."
@@ -140,7 +140,7 @@ Collected via a public [Notion feedback form](https://star-eclipse-1fd.notion.si
 | Real-world onboarding | One-tap handle → passkey/dev wallet, fee-sponsored, no seed phrase (`components/landing-onboard.tsx`, `app/app`) |
 | Monitoring + analytics | Vercel Analytics + Speed Insights (`components/analytics.tsx`) + live on-chain usage at `/stats` (`app/api/stats`) |
 | 10+ users + wallet interactions | 50+ wallets on-chain (`/stats`), verifiable on Stellar Expert |
-| Feedback collection | Public Notion form + summary above |
+| Feedback collection | Public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (+ Notion mirror) + summary above |
 | Contracts on testnet · 15+ commits · public repo · demo video | ✅ (see Yellow/Orange sections; 40+ commits) |
 
 ---
@@ -161,7 +161,7 @@ Growth + a feedback loop that changed the product: a pitch deck, a live testnet-
 
 ### Feedback → shipped improvement (with commit links)
 
-Feedback is collected via the public [Notion form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) and exported to [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (Notion → CSV; also openable as `.xlsx`).
+Feedback is collected via the public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback; Notion mirror also live) and exported to [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (Responses → Google Sheets → Download `.xlsx`).
 
 | Feedback | Change shipped | Where |
 | --- | --- | --- |
@@ -175,7 +175,7 @@ Feedback is collected via the public [Notion form](https://star-eclipse-1fd.noti
 | Pitch deck | [`docs/pitch-deck.pdf`](./docs/pitch-deck.pdf) (brand-skinned) + [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) outline |
 | ~50 testnet users | Live count at [`/stats`](https://alvinmunk.vercel.app/stats), verifiable on Stellar Expert |
 | Real transaction activity | Vouch/claim/quest txs on-chain (reputation contract above) |
-| Feedback collection + export | Notion form → [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) |
+| Feedback collection + export | [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) → [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (`.xlsx`) |
 | Feedback-driven iteration | Tip-by-`@handle` (`components/Tip.tsx`) — see table above |
 
 ---

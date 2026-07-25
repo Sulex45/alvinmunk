@@ -147,7 +147,9 @@ Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/
 
 ## Blue Belt (Level 5) — submission
 
-Growth + a feedback loop that changed the product: a pitch deck, a live testnet-user count climbing toward 50, real on-chain transaction activity, exported feedback, and a shipped improvement traceable to a specific request.
+Growth + a feedback loop that changed the product: a pitch deck, 50+ testnet users, real on-chain transaction activity, exported feedback, and a shipped improvement traceable to a specific request.
+
+**Live app:** https://alvinmunk.vercel.app · **Live network stats:** https://alvinmunk.vercel.app/stats · **Demo video (full walkthrough):** https://youtu.be/3FANRKLM6PI
 
 ### Pitch deck
 
@@ -161,7 +163,7 @@ Growth + a feedback loop that changed the product: a pitch deck, a live testnet-
 
 ### Feedback → shipped improvement (with commit links)
 
-Feedback is collected via the public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback; Notion mirror also live) and exported to [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (Responses → Google Sheets → Download `.xlsx`).
+Feedback is collected via the public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback; Notion mirror also live) and exported to an Excel sheet — [`docs/feedback/responses.xlsx`](./docs/feedback/responses.xlsx) (also as [`.csv`](./docs/feedback/responses.csv)) via Responses → Google Sheets → Download `.xlsx`.
 
 | Feedback | Change shipped | Where |
 | --- | --- | --- |
@@ -173,10 +175,11 @@ Feedback is collected via the public [Google Form](https://forms.gle/kNXR3zmZhGh
 | Requirement | Implementation |
 | --- | --- |
 | Pitch deck | [`docs/pitch-deck.pdf`](./docs/pitch-deck.pdf) (brand-skinned) + [`docs/PITCH_DECK.md`](./docs/PITCH_DECK.md) outline |
-| ~50 testnet users | Live count at [`/stats`](https://alvinmunk.vercel.app/stats), verifiable on Stellar Expert |
+| 50+ testnet users | Live count at [`/stats`](https://alvinmunk.vercel.app/stats), verifiable on Stellar Expert |
 | Real transaction activity | Vouch/claim/quest txs on-chain (reputation contract above) |
-| Feedback collection + export | [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) → [`docs/feedback/responses.csv`](./docs/feedback/responses.csv) (`.xlsx`) |
-| Feedback-driven iteration | Tip-by-`@handle` (`components/Tip.tsx`) — see table above |
+| Demo video (full walkthrough) | https://youtu.be/3FANRKLM6PI |
+| Feedback collection + Excel export | [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) → [`docs/feedback/responses.xlsx`](./docs/feedback/responses.xlsx) |
+| Feedback-driven iteration (+ commit link) | Tip-by-`@handle` (`components/Tip.tsx`, [`2bac3c1`](https://github.com/mericcintosun/alvinmunk/commit/2bac3c1)) — see table above |
 
 ---
 

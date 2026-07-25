@@ -1,18 +1,28 @@
 import { NextResponse } from 'next/server';
 import { rpc, scValToNative, xdr } from '@stellar/stellar-sdk';
+import roster from '@/data/onboarded-wallets.json';
 
 /**
- * Live network stats — unique wallets that have interacted with the app's contracts, per
- * network. Read straight from Soroban RPC `getEvents` (no standing backend / indexer yet),
- * so the number is real and grows as people onboard. RPC keeps ~a day of events, so this is
- * "wallets active on-chain in the retention window"; the authoritative cumulative roster
- * lives in the onboarding sheet (docs/USER_FEEDBACK.md). A durable indexer (issue #12) makes
- * it fully cumulative.
+ * Network stats — unique wallets that have interacted with the app's contracts, per network.
+ *
+ * Two sources, unioned:
+ *  1. A committed **roster** (`data/onboarded-wallets.json`) — the durable, cumulative set of
+ *     onboarded wallets. Soroban RPC only keeps ~7 days of events, so a pure `getEvents` count
+ *     silently decays once seed activity ages out of the retention window (this is why the page
+ *     once dropped to "1"). The roster is the permanent floor and never decays.
+ *  2. A **live** `getEvents` scan over a short recent window — catches brand-new wallets that
+ *     onboarded after the roster was last captured, so the number still grows organically.
+ *
+ * Refresh the roster by re-running `scripts/scan-roster.mjs` (widens the window + fully
+ * paginates) and committing its output. A durable indexer (issue #12) would fold both paths.
  */
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const WINDOW = 9000; // ledgers (~a day); wider ranges return out-of-range on public RPC
+// Live scan: a short, dense window so the serverless call stays fast. The roster carries
+// history; this only needs to see the last day or so of fresh onboarding.
+const LIVE_WINDOW = 17_280; // ~1 day of ledgers
+const MAX_PAGES = 25;
 const ADDR = /^[GC][A-Z2-7]{55}$/;
 
 type NetKey = 'testnet' | 'mainnet';
@@ -73,25 +83,23 @@ function decode(v: xdr.ScVal | string): unknown {
   }
 }
 
-async function statsFor(net: NetKey) {
-  const cfg = NETWORKS[net];
+/** Live scan of the recent window. Returns the fresh addresses and the latest ledger. */
+async function liveScan(cfg: (typeof NETWORKS)[NetKey]): Promise<{ seen: Set<string>; latest: number }> {
+  const seen = new Set<string>();
   const ids = [cfg.rep, cfg.registry].filter(Boolean) as string[];
-  if (ids.length === 0) {
-    return { network: net, configured: false, users: 0, target: TARGET[net], addresses: [] as string[] };
-  }
+  if (ids.length === 0) return { seen, latest: 0 };
   const server = new rpc.Server(cfg.rpc);
   let latest = 0;
   try {
     latest = (await server.getLatestLedger()).sequence;
   } catch {
-    return { network: net, configured: true, users: 0, target: TARGET[net], addresses: [], error: 'rpc' };
+    return { seen, latest: 0 };
   }
-  const startLedger = Math.max(1, latest - WINDOW);
-  const seen = new Set<string>();
+  const startLedger = Math.max(1, latest - LIVE_WINDOW);
   try {
     const filters = [{ type: 'contract' as const, contractIds: ids, topics: [['*', '*']] }];
     let cursor: string | undefined;
-    for (let page = 0; page < 10; page++) {
+    for (let page = 0; page < MAX_PAGES; page++) {
       const res = await server.getEvents(
         cursor ? { filters, cursor, limit: 1000 } : { filters, startLedger, limit: 1000 },
       );
@@ -100,20 +108,40 @@ async function statsFor(net: NetKey) {
         collectAddrs(decode(ev.value as xdr.ScVal | string), seen);
       }
       cursor = res.cursor;
-      if (!cursor || res.events.length === 0) break;
+      // Keep paging while the RPC hands back a cursor — a page can legitimately be empty when
+      // the scanned sub-range holds no events. Stopping on an empty page (the old bug) capped
+      // the count at "whatever is in the last few thousand ledgers", i.e. sometimes 1.
+      if (!cursor) break;
     }
   } catch {
     /* return what we have */
   }
+  return { seen, latest };
+}
+
+async function statsFor(net: NetKey) {
+  const cfg = NETWORKS[net];
+  const rosterList = ((roster as Record<string, string[]>)[net] ?? []).filter((a) => ADDR.test(a));
+  const configured = Boolean(cfg.rep || cfg.registry) || rosterList.length > 0;
+
+  // Durable floor: the committed roster. Never decays.
+  const seen = new Set<string>(rosterList);
+
+  // Organic growth: union in anything new from the live window.
+  const { seen: live, latest } = await liveScan(cfg);
+  for (const a of live) seen.add(a);
+
   // Drop the app's own contract addresses so only real user wallets are counted.
   for (const id of cfg.exclude ?? []) if (id) seen.delete(id);
+
   const addresses = [...seen];
   return {
     network: net,
-    configured: true,
+    configured,
     users: addresses.length,
     target: TARGET[net],
-    latestLedger: latest,
+    latestLedger: latest || undefined,
+    roster: rosterList.length,
     addresses: addresses.slice(0, 300),
   };
 }

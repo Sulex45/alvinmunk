@@ -123,14 +123,24 @@ A production MVP on Stellar with real users, one-tap onboarding, analytics + mon
 - **50+ unique wallets** have interacted with the contracts (live count at [`/stats`](https://alvinmunk.vercel.app/stats), read straight from Soroban RPC — screenshot above). Each onboarded user signs on-chain: a genesis `manageData` tx + a `registry.claim` contract call; passkey users onboard as `C…` smart wallets, classic users as `G…`.
 - **Verify on-chain:** every wallet + tx is on Stellar Expert. The registry contract shows all handle claims: [`CCT5EGFZ…`](https://stellar.expert/explorer/testnet/contract/CCT5EGFZ33IFLMUU6EBMC6NWRLX5TWJS5FICNJFBG7MU5PTAU6PFMVH4); the reputation contract shows vouch activity: [`CDRYXUS5…`](https://stellar.expert/explorer/testnet/contract/CDRYXUS55TKGYEM3YUB3YTJWQKSWWQABK6YPQK7SLEPVALWYK4IR7WCL).
 
-### Basic user feedback summary
+### User feedback — collection, exported sheet & iteration
 
-Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback) — also mirrored as a [Notion form](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105).
+**Exported responses sheet (evidence):** [`docs/feedback/responses.xlsx`](./docs/feedback/responses.xlsx) (Excel) · also [`docs/feedback/responses.csv`](./docs/feedback/responses.csv). Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback; [Notion mirror](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) also live) and exported via Responses → Google Sheets → Download `.xlsx`.
 
-- **Average rating so far:** 4 / 5.
-- **What worked:** "Interface is working well."
-- **Top feature request:** weighted vouch — weight each vouch by the voucher's own reputation, split across everyone they vouch for, anchored to a verified seed set.
-- **Feedback → improvement (with commit links):** maintained in [`docs/USER_FEEDBACK.md`](./docs/USER_FEEDBACK.md) as more testers come in.
+**Responses (raw evidence — the rows in the sheet above):**
+
+| Name/handle | Wallet | Rating | What worked | Confusing/missing | Wants next |
+| --- | --- | :---: | --- | --- | --- |
+| beko | [`GB72PZXN…YZ3H3`](https://stellar.expert/explorer/testnet/account/GB72PZXNOU6DJ2BXZDITS24A5JCN3CEUNTKIX5ESZDXAY2R5HO7YZ3H3) | 4/5 | "Interface is working well." | weighted vouch | Weight each vouch by the voucher's own reputation, split across their vouchees, anchored to a verified seed set |
+
+**Summary:** average rating **4/5**; UI praised; top request = **weighted vouch**.
+
+**How we improve next, based on this feedback (with git commit link):**
+
+| Feedback | Change shipped / planned | Commit |
+| --- | --- | --- |
+| "Recipients are hard — nobody memorizes a 56-char key" | **Tip by `@handle`** — registry resolves the handle to a wallet on-chain, with inline confirmation before sending (`components/Tip.tsx`) | [`2bac3c1`](https://github.com/mericcintosun/alvinmunk/commit/2bac3c1) |
+| "weighted vouch" (top request) | Scoped weighted-vouch for the reputation track (weight by voucher reputation, split across vouchees, seed-set anchored) | planned — tracked in [`docs/USER_FEEDBACK.md`](./docs/USER_FEEDBACK.md) |
 
 ### Requirements → where they live
 
@@ -140,7 +150,7 @@ Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/
 | Real-world onboarding | One-tap handle → passkey/dev wallet, fee-sponsored, no seed phrase (`components/landing-onboard.tsx`, `app/app`) |
 | Monitoring + analytics | Vercel Analytics + Speed Insights (`components/analytics.tsx`) + live on-chain usage at `/stats` (`app/api/stats`) |
 | 10+ users + wallet interactions | 50+ wallets on-chain (`/stats`), verifiable on Stellar Expert |
-| Feedback collection | Public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (+ Notion mirror) + summary above |
+| Feedback collection + exported sheet | [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) → [`docs/feedback/responses.xlsx`](./docs/feedback/responses.xlsx) (Excel) + raw-evidence table above |
 | Contracts on testnet · 15+ commits · public repo · demo video | ✅ (see Yellow/Orange sections; 40+ commits) |
 
 ---

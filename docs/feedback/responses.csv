@@ -1,2 +1,6 @@
-Handle,Email,Wallet address,Rating,What worked well,What was confusing or missing,One feature you want next,Submitted
-beko,gunduzberkay1532@gmail.com,GB72PZXNOU6DJ2BXZDITS24A5JCN3CEUNTKIX5ESZDXAY2R5HO7YZ3H3,4,Interface is working well.,weighted vouch,"Weight each vouch by the voucher's own reputation, split across everyone they vouch for, and anchor it to a verified seed set.",2026-07-24T17:09:21Z
+Timestamp,Name,Wallet or @handle,Rating,What worked well,What to improve / wants next
+2026-07-24T17:09:21+03:00,Berkay Gündüz (beko),GB72PZXNOU6DJ2BXZDITS24A5JCN3CEUNTKIX5ESZDXAY2R5HO7YZ3H3,4,Interface is working well.,"weighted vouch — weight each vouch by the voucher's own reputation, split across their vouchees, anchored to a verified seed set"
+2026-07-29T12:47:18+03:00,Cansu Güzel,@cansu,3,,
+2026-07-29T12:47:35+03:00,Umut Akçayır,@umut,5,,
+2026-07-29T12:47:55+03:00,Nazlı Kır,@nazli,1,,
+2026-07-29T12:48:13+03:00,Leyla Bayıroğlu,@leyla,5,,

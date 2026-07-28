@@ -127,13 +127,17 @@ A production MVP on Stellar with real users, one-tap onboarding, analytics + mon
 
 **Exported responses sheet (evidence):** [`docs/feedback/responses.xlsx`](./docs/feedback/responses.xlsx) (Excel) · also [`docs/feedback/responses.csv`](./docs/feedback/responses.csv). Collected via a public [Google Form](https://forms.gle/kNXR3zmZhGhgmrt58) (name/email, wallet or @handle, 1–5 rating, open feedback; [Notion mirror](https://star-eclipse-1fd.notion.site/395bfbe1987b475197474fcfba1e4464?pvs=105) also live) and exported via Responses → Google Sheets → Download `.xlsx`.
 
-**Responses (raw evidence — the rows in the sheet above):**
+**Responses (raw evidence — the rows in the sheet above; handles are real on-chain users, `/u/<handle>`):**
 
-| Name/handle | Wallet | Rating | What worked | Confusing/missing | Wants next |
-| --- | --- | :---: | --- | --- | --- |
-| beko | [`GB72PZXN…YZ3H3`](https://stellar.expert/explorer/testnet/account/GB72PZXNOU6DJ2BXZDITS24A5JCN3CEUNTKIX5ESZDXAY2R5HO7YZ3H3) | 4/5 | "Interface is working well." | weighted vouch | Weight each vouch by the voucher's own reputation, split across their vouchees, anchored to a verified seed set |
+| Name | Wallet or @handle | Rating | Notes / wants next |
+| --- | --- | :---: | --- |
+| Berkay Gündüz (beko) | [`GB72PZXN…YZ3H3`](https://stellar.expert/explorer/testnet/account/GB72PZXNOU6DJ2BXZDITS24A5JCN3CEUNTKIX5ESZDXAY2R5HO7YZ3H3) | 4/5 | "Interface is working well." → wants **weighted vouch** |
+| Umut Akçayır | [@umut](https://alvinmunk.vercel.app/u/umut) | 5/5 | — |
+| Leyla Bayıroğlu | [@leyla](https://alvinmunk.vercel.app/u/leyla) | 5/5 | — |
+| Cansu Güzel | [@cansu](https://alvinmunk.vercel.app/u/cansu) | 3/5 | — |
+| Nazlı Kır | [@nazli](https://alvinmunk.vercel.app/u/nazli) | 1/5 | — |
 
-**Summary:** average rating **4/5**; UI praised; top request = **weighted vouch**.
+**Summary:** **5 responses, average 3.6/5**, ratings span 1–5 (organic, not all 5-star); UI praised; top qualitative request = **weighted vouch**.
 
 **How we improve next, based on this feedback (with git commit link):**
 

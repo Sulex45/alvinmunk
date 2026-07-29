@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: alvinmunk Strategy Docs
+    url: https://github.com/mericcintosun/alvinmunk/tree/main/belts
+    about: Belt roadmaps and strategy documentation
+  - name: Project Board
+    url: https://github.com/mericcintosun/alvinmunk/projects
+    about: Follow the sprint progress
+
